@@ -2,6 +2,7 @@ class Game < ApplicationRecord
   @@state = 'wait'
   @@p1 = ''
   @@p2 = ''
+  @@players_list = []
 
   broadcasts_to ->(_c) { 'test' }, inserts_by: :prepend, target: 'home'
 
@@ -29,5 +30,10 @@ class Game < ApplicationRecord
 
   def self.state
     @@state
+  end
+
+  def self.add_player(player)
+    GameChannel.broadcasts_to('game_channel', 'Player joined')
+    @@players << player
   end
 end
